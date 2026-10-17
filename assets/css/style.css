@@ -1,0 +1,132 @@
+:root {
+    --ink: #132238;
+    --blue: #3066e8;
+    --soft: #f4f7fc;
+    --line: #e6ebf3
+}
+
+body {
+    background: var(--soft);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif
+}
+
+.navbar {
+    background: rgba(255, 255, 255, .94);
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(10px)
+}
+
+.navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ink)
+}
+
+.navbar-brand span {
+    color: var(--blue)
+}
+
+.nav-link {
+    color: #536175
+}
+
+.btn-primary {
+    background: var(--blue);
+    border-color: var(--blue);
+    border-radius: 9px
+}
+
+.hero {
+    background: linear-gradient(125deg, #132238, #244b91);
+    color: #fff;
+    border-radius: 24px;
+    overflow: hidden
+}
+
+.hero .display-5 {
+    font-weight: 800
+}
+
+.card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(30, 48, 74, .04)
+}
+
+.item-card {
+    transition: .2s
+}
+
+.item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 26px rgba(30, 48, 74, .10)
+}
+
+.item-photo {
+    height: 185px;
+    object-fit: cover;
+    background: #e9eef7
+}
+
+.placeholder-photo {
+    height: 185px;
+    background: linear-gradient(135deg, #e8eefb, #d8e4fd);
+    display: grid;
+    place-items: center;
+    color: var(--blue);
+    font-size: 2.5rem
+}
+
+.badge {
+    font-weight: 600
+}
+
+.badge-lost {
+    background: #fff0ed;
+    color: #d85135
+}
+
+.badge-found {
+    background: #eaf8f0;
+    color: #208653
+}
+
+.badge-returned {
+    background: #edf1f7;
+    color: #59677a
+}
+
+.form-control,
+.form-select {
+    border-radius: 9px;
+    padding: .65rem .8rem;
+    border-color: #dce3ed
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #8aa9ff;
+    box-shadow: 0 0 0 .2rem rgba(48, 102, 232, .12)
+}
+
+.auth-card {
+    max-width: 470px;
+    margin: 2rem auto
+}
+
+.stat {
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--line)
+}
+
+footer {
+    color: #7d8999
+}
+
+.empty {
+    padding: 4rem 1rem;
+    text-align: center;
+    color: #6c788a
+}
