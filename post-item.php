@@ -1,2 +1,70 @@
-<?php require 'functions.php';require_login();$error='';if($_SERVER['REQUEST_METHOD']==='POST'){$title=trim($_POST['title']??'');$category=$_POST['category']??'Other';$status=$_POST['status']??'lost';$location=trim($_POST['location']??'');$date=$_POST['item_date']??'';$description=trim($_POST['description']??'');$image=upload_image();if(strlen($title)<3||strlen($location)<2||!in_array($status,['lost','found'])||!$date)$error='Please complete all required fields.';elseif($image===false)$error='Upload a JPG, PNG, or WEBP image smaller than 3 MB.';else{$uid=$_SESSION['user']['id'];$stmt=$conn->prepare('INSERT INTO items(user_id,title,category,description,location,item_date,image,status) VALUES(?,?,?,?,?,?,?,?)');$stmt->bind_param('isssssss',$uid,$title,$category,$description,$location,$date,$image,$status);$stmt->execute();flash('success','Your item has been posted.');redirect('my-items.php');}}$page_title='Post an item';require 'header.php'; ?>
-<div class="row justify-content-center"><div class="col-lg-8"><div class="d-flex justify-content-between align-items-end mb-4"><div><p class="text-primary fw-semibold mb-1">NEW LISTING</p><h1 class="h2 fw-bold mb-0">Post an item</h1></div></div><div class="card"><div class="card-body p-4 p-md-5"><?php if($error):?><div class="alert alert-danger"><?=e($error)?></div><?php endif;?><form method="post" enctype="multipart/form-data"><div class="row g-3"><div class="col-md-8"><label class="form-label">Item title *</label><input required name="title" class="form-control" value="<?=e($_POST['title']??'')?>" placeholder="e.g. Black wireless earbuds"></div><div class="col-md-4"><label class="form-label">Status *</label><select name="status" class="form-select"><option value="lost">Lost</option><option value="found">Found</option></select></div><div class="col-md-6"><label class="form-label">Category</label><select name="category" class="form-select"><?php foreach(['Electronics','Documents','Keys','Clothing','Accessories','Other'] as $c):?><option><?=$c?></option><?php endforeach;?></select></div><div class="col-md-6"><label class="form-label">Date *</label><input required type="date" name="item_date" class="form-control" value="<?=e($_POST['item_date']??date('Y-m-d'))?>"></div><div class="col-md-8"><label class="form-label">Last seen / found at *</label><input required name="location" class="form-control" value="<?=e($_POST['location']??'')?>" placeholder="e.g. Library, second floor"></div><div class="col-md-4"><label class="form-label">Photo</label><input type="file" accept="image/jpeg,image/png,image/webp" name="image" class="form-control"></div><div class="col-12"><label class="form-label">Description</label><textarea name="description" rows="4" class="form-control" placeholder="Include identifying details, but keep valuables secure."><?=e($_POST['description']??'')?></textarea></div><div class="col-12 pt-2"><button class="btn btn-primary px-4">Publish listing</button></div></div></form></div></div></div></div><?php require 'footer.php'; ?>
+<?php require 'functions.php';
+require_login();
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = trim($_POST['title'] ?? '');
+    $category = $_POST['category'] ?? 'Other';
+    $status = $_POST['status'] ?? 'lost';
+    $location = trim($_POST['location'] ?? '');
+    $date = $_POST['item_date'] ?? '';
+    $description = trim($_POST['description'] ?? '');
+    $image = upload_image();
+    if (strlen($title) < 3 || strlen($location) < 2 || !in_array($status, ['lost', 'found']) || !$date)
+        $error = 'Please complete all required fields.';
+    elseif ($image === false)
+        $error = 'Upload a JPG, PNG, or WEBP image smaller than 3 MB.';
+    else {
+        $uid = $_SESSION['user']['id'];
+        $stmt = $conn->prepare('INSERT INTO items(user_id,title,category,description,location,item_date,image,status) VALUES(?,?,?,?,?,?,?,?)');
+        $stmt->bind_param('isssssss', $uid, $title, $category, $description, $location, $date, $image, $status);
+        $stmt->execute();
+        flash('success', 'Your item has been posted.');
+        redirect('my-items.php');
+    }
+}
+$page_title = 'Post an item';
+require 'header.php'; ?>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <p class="text-primary fw-semibold mb-1">NEW LISTING</p>
+                <h1 class="h2 fw-bold mb-0">Post an item</h1>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body p-4 p-md-5"><?php if ($error): ?>
+                    <div class="alert alert-danger"><?= e($error) ?></div><?php endif; ?>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <div class="col-md-8"><label class="form-label">Item title *</label><input required name="title"
+                                class="form-control" value="<?= e($_POST['title'] ?? '') ?>"
+                                placeholder="e.g. Black wireless earbuds"></div>
+                        <div class="col-md-4"><label class="form-label">Status *</label><select name="status"
+                                class="form-select">
+                                <option value="lost">Lost</option>
+                                <option value="found">Found</option>
+                            </select></div>
+                        <div class="col-md-6"><label class="form-label">Category</label><select name="category"
+                                class="form-select"><?php foreach (['Electronics', 'Documents', 'Keys', 'Clothing', 'Accessories', 'Other'] as $c): ?>
+                                    <option><?= $c ?></option><?php endforeach; ?>
+                            </select></div>
+                        <div class="col-md-6"><label class="form-label">Date *</label><input required type="date"
+                                name="item_date" class="form-control"
+                                value="<?= e($_POST['item_date'] ?? date('Y-m-d')) ?>"></div>
+                        <div class="col-md-8"><label class="form-label">Last seen / found at *</label><input required
+                                name="location" class="form-control" value="<?= e($_POST['location'] ?? '') ?>"
+                                placeholder="e.g. Library, second floor"></div>
+                        <div class="col-md-4"><label class="form-label">Photo</label><input type="file"
+                                accept="image/jpeg,image/png,image/webp" name="image" class="form-control"></div>
+                        <div class="col-12"><label class="form-label">Description</label><textarea name="description"
+                                rows="4" class="form-control"
+                                placeholder="Include identifying details, but keep valuables secure."><?= e($_POST['description'] ?? '') ?></textarea>
+                        </div>
+                        <div class="col-12 pt-2"><button class="btn btn-primary px-4">Publish listing</button></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div><?php require 'footer.php'; ?>

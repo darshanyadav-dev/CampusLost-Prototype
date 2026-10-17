@@ -1,6 +1,42 @@
-<?php require 'functions.php'; if(logged_in())redirect('index.php'); $error='';
-if($_SERVER['REQUEST_METHOD']==='POST'){ $name=trim($_POST['name']??'');$email=trim($_POST['email']??'');$pass=$_POST['password']??'';
- if(strlen($name)<2||!filter_var($email,FILTER_VALIDATE_EMAIL)||strlen($pass)<6)$error='Enter your name, a valid email, and a password of at least 6 characters.';
- else{$check=$conn->prepare('SELECT id FROM users WHERE email=?');$check->bind_param('s',$email);$check->execute();if($check->get_result()->num_rows)$error='That email is already registered.';else{$hash=password_hash($pass,PASSWORD_DEFAULT);$stmt=$conn->prepare('INSERT INTO users(name,email,password) VALUES(?,?,?)');$stmt->bind_param('sss',$name,$email,$hash);$stmt->execute();flash('success','Account created. Please sign in.');redirect('login.php');}}}
-$page_title='Create account';require 'header.php'; ?>
-<div class="card auth-card"><div class="card-body p-4 p-md-5"><h1 class="h3 fw-bold">Join CampusLost</h1><p class="text-secondary">Help build a more helpful campus.</p><?php if($error):?><div class="alert alert-danger"><?=e($error)?></div><?php endif;?><form method="post"><label class="form-label">Full name</label><input required name="name" class="form-control mb-3" value="<?=e($_POST['name']??'')?>"><label class="form-label">College email</label><input required type="email" name="email" class="form-control mb-3" value="<?=e($_POST['email']??'')?>"><label class="form-label">Password</label><input required type="password" name="password" class="form-control mb-4"><button class="btn btn-primary w-100">Create account</button></form><p class="text-center small mt-3 mb-0">Already a member? <a href="login.php">Sign in</a></p></div></div><?php require 'footer.php'; ?>
+<?php require 'functions.php';
+if (logged_in())
+    redirect('index.php');
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $pass = $_POST['password'] ?? '';
+    if (strlen($name) < 2 || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($pass) < 6)
+        $error = 'Enter your name, a valid email, and a password of at least 6 characters.';
+    else {
+        $check = $conn->prepare('SELECT id FROM users WHERE email=?');
+        $check->bind_param('s', $email);
+        $check->execute();
+        if ($check->get_result()->num_rows)
+            $error = 'That email is already registered.';
+        else {
+            $hash = password_hash($pass, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare('INSERT INTO users(name,email,password) VALUES(?,?,?)');
+            $stmt->bind_param('sss', $name, $email, $hash);
+            $stmt->execute();
+            flash('success', 'Account created. Please sign in.');
+            redirect('login.php');
+        }
+    }
+}
+$page_title = 'Create account';
+require 'header.php'; ?>
+<div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+        <h1 class="h3 fw-bold">Join CampusLost</h1>
+        <p class="text-secondary">Help build a more helpful campus.</p><?php if ($error): ?>
+            <div class="alert alert-danger"><?= e($error) ?></div><?php endif; ?>
+        <form method="post"><label class="form-label">Full name</label><input required name="name"
+                class="form-control mb-3" value="<?= e($_POST['name'] ?? '') ?>"><label class="form-label">College
+                email</label><input required type="email" name="email" class="form-control mb-3"
+                value="<?= e($_POST['email'] ?? '') ?>"><label class="form-label">Password</label><input required
+                type="password" name="password" class="form-control mb-4"><button class="btn btn-primary w-100">Create
+                account</button></form>
+        <p class="text-center small mt-3 mb-0">Already a member? <a href="login.php">Sign in</a></p>
+    </div>
+</div><?php require 'footer.php'; ?>
